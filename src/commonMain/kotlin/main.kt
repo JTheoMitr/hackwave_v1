@@ -95,8 +95,8 @@ class Scene2() : Scene() {
 
         // Establish Music
 
-        val music = resourcesVfs["eric_track_1.wav"].readMusic()
-        music.play()
+       // val music = resourcesVfs["eric_track_1.wav"].readMusic()
+       // music.play()
 
 
         // Add Components to the Stage
