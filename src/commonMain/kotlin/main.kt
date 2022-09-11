@@ -86,8 +86,8 @@ class Scene2() : Scene() {
         val redSkullOneAnimation = redSkullOne.getSpriteAnimation("red")
 
         // Can
-        val canOneSprites = resourcesVfs["oil_can_one.xml"].readAtlas()
-        val canOneAnimation = canOneSprites.getSpriteAnimation("img")
+        val canOneSprites = resourcesVfs["circuit_board.xml"].readAtlas()
+        val canOneAnimation = canOneSprites.getSpriteAnimation("circuit")
 
         //Bag
         val garbageBagSprites = resourcesVfs["garbage_bag_one.xml"].readAtlas()
@@ -634,7 +634,9 @@ class Scene2() : Scene() {
                         }
                     }
 
-                    it.moveTo(canX, height + buffer, 7.seconds, Easing.EASE_IN)
+                    awaitAll(async {it.tween(it::rotation[270.degrees], time = 5.seconds, easing = Easing.EASE_IN_OUT)},
+                           async{it.moveTo(canX, height + buffer, 7.seconds, Easing.EASE_IN)})
+                    async{it.tween(it::rotation[(-270).degrees], time = 5.seconds, easing = Easing.EASE_IN_OUT)}
 
                 }
             })
