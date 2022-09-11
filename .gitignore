@@ -4,11 +4,11 @@
 *.iml
 *.hprof
 *.log
+*.wav
 korge.keystore
 local.properties
 src/main/*
 .DS_Store
-
 
 # Project exclude paths
 /gradle/
