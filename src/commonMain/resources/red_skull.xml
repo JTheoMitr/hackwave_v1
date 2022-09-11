@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:4852e1c6a9361a4f8107836f7e2a8ca1:5b13c18b7ee9fa4c14a25c8c012eda57:fc4eae5fdae0a6f83437dc7b9c874e79$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="red_skull.png" width="1800" height="1350">
+    <sprite n="red_skull_1.png" x="0" y="0" w="450" h="450"/>
+    <sprite n="red_skull_2.png" x="450" y="0" w="450" h="450"/>
+    <sprite n="red_skull_3.png" x="900" y="0" w="450" h="450"/>
+    <sprite n="red_skull_4.png" x="1350" y="0" w="450" h="450"/>
+    <sprite n="red_skull_5.png" x="0" y="450" w="450" h="450"/>
+    <sprite n="red_skull_6.png" x="450" y="450" w="450" h="450"/>
+    <sprite n="red_skull_7.png" x="900" y="450" w="450" h="450"/>
+    <sprite n="red_skull_8.png" x="1350" y="450" w="450" h="450"/>
+    <sprite n="red_skull_9.png" x="0" y="900" w="450" h="450"/>
+    <sprite n="red_skull_10.png" x="450" y="900" w="450" h="450"/>
+</TextureAtlas>

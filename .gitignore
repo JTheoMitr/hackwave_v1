@@ -9,6 +9,7 @@ local.properties
 src/main/*
 .DS_Store
 
+src/commonMain/resources/eric_track_1.wav
 
 # Project exclude paths
 /gradle/
