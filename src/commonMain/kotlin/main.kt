@@ -89,9 +89,6 @@ class Scene2() : Scene() {
         val canOneSprites = resourcesVfs["circuit_board.xml"].readAtlas()
         val canOneAnimation = canOneSprites.getSpriteAnimation("circuit")
 
-        //Bag
-        val garbageBagSprites = resourcesVfs["garbage_bag_one.xml"].readAtlas()
-        val garbageBagAnimation = garbageBagSprites.getSpriteAnimation("img")
 
         // Establish Music
 
@@ -239,10 +236,24 @@ class Scene2() : Scene() {
             position(((rect.width / 4) * 3) + 10, 60.0)
         }
 
-        // GARBAGE BAG
-        val garbageBag = image(resourcesVfs["garbage_bag_one.png"].readBitmap()) {
+        val targetFrame = image(resourcesVfs["monitor_cyberpunk_number_display.png"].readBitmap()) {
             anchor(.5, .5)
-            scale(.1)
+            scale(.69)
+            position((rect.width / 7), 56.0)
+        }
+
+        // Energy ball
+        val energyBall = image(resourcesVfs["electric_ball_1.png"].readBitmap()) {
+            rotation = maxDegrees
+            anchor(.5, .5)
+            scale(.3)
+            position(rect.width - 80, rect.height - 60)
+        }
+
+        val battery = image(resourcesVfs["pixel_battery_red.png"].readBitmap()) {
+            rotation = maxDegrees
+            anchor(.5, .5)
+            scale(.3)
             position(rect.width - 80, rect.height - 60)
         }
 
@@ -282,7 +293,7 @@ class Scene2() : Scene() {
         fun canSwitchHit() {
             if (canSwitch) {
                 garbagePickUps += 1
-                garbageBag.scale += .05
+                energyBall.scale += .05
             }
 
             // WIN Parameters
@@ -635,7 +646,7 @@ class Scene2() : Scene() {
                     }
 
                     awaitAll(async {it.tween(it::rotation[270.degrees], time = 5.seconds, easing = Easing.EASE_IN_OUT)},
-                           async{it.moveTo(canX, height + buffer, 7.seconds, Easing.EASE_IN)})
+                           async{it.moveTo(canX, height + buffer, 4.seconds, Easing.EASE_IN)})
                     async{it.tween(it::rotation[(-270).degrees], time = 5.seconds, easing = Easing.EASE_IN_OUT)}
 
                 }
@@ -647,8 +658,11 @@ class Scene2() : Scene() {
                 awaitAll(
                     async { runJelly() },
                     async {
+                       energyBall.tween(energyBall::rotation[minDegrees], time = 4.seconds, easing = Easing.EASE_IN_OUT)
+                        energyBall.tween(energyBall::rotation[maxDegrees], time = 3.seconds, easing = Easing.EASE_IN_OUT) },
+                    async {
                         neonTarget.tween(neonTarget::rotation[minDegrees], time = 3.seconds, easing = Easing.EASE_IN_OUT)
-                        neonTarget.tween(neonTarget::rotation[maxDegrees], time = 3.seconds, easing = Easing.EASE_IN_OUT) }
+                       neonTarget.tween(neonTarget::rotation[maxDegrees], time = 4.seconds, easing = Easing.EASE_IN_OUT) }
                 )
             }
         }
@@ -673,7 +687,7 @@ class Scene2() : Scene() {
 
         }
 
-        garbageBag.onClick {
+        energyBall.onClick {
             levelIsActive = true
             println(levelIsActive.equals(true))
             jellyTimer()
