@@ -1,4 +1,5 @@
 import com.soywiz.klock.*
+import com.soywiz.klogger.AnsiEscape
 import com.soywiz.korau.sound.readMusic
 import com.soywiz.korev.Key
 import com.soywiz.korge.*
@@ -66,13 +67,19 @@ class Scene2() : Scene() {
         val buffer = 40
         val minDegrees = (-110).degrees
         val maxDegrees = (+90).degrees
-        var jellyHits = 0
-        var garbagePickUps = 0
-        var canSwitch = true
+
+        var enemyHits = 0
+        var chipPickUps = 0
+        var targetNumberValue = 0
+        var currentNumberValue = 0
+
+        var chipSwitch = true
         var jellySwitchPurple = true
-        var jellySwitchGreen = true
         var levelIsActive = false
+
         val surferBoundary = rect.height - 130
+
+        val numberSwitch = true
 
         val fontOne = resourcesVfs["ClearSans-Bold.ttf"].readTtfFont()
 
@@ -95,18 +102,9 @@ class Scene2() : Scene() {
         val redSkullOne = resourcesVfs["red_skull.xml"].readAtlas()
         val redSkullOneAnimation = redSkullOne.getSpriteAnimation("red")
 
-        // Can
-        val canOneSprites = resourcesVfs["circuit_board.xml"].readAtlas()
-        val canOneAnimation = canOneSprites.getSpriteAnimation("circuit")
-
-
-        // Establish Music
-
-        val music = resourcesVfs["eric_track_1.wav"].readMusic()
-        music.play()
-
-
-        // Add Components to the Stage
+        // Chip
+        val chipOneSprites = resourcesVfs["circuit_board.xml"].readAtlas()
+        val chipOneAnimation = chipOneSprites.getSpriteAnimation("circuit")
 
         // Banner
         val rect2 = solidRect(1024.0, 65.0, Colors["#3c436df7"]).xy(0.0, 0.0)
@@ -221,8 +219,8 @@ class Scene2() : Scene() {
         }
         // CAN CLUSTER
 
-        val canCluster = Array<Sprite>(1) {
-            sprite(canOneAnimation) {
+        val chipCluster = Array<Sprite>(1) {
+            sprite(chipOneAnimation) {
                 anchor(.5, .5)
                 scale(.2)
                 visible = false
@@ -230,6 +228,8 @@ class Scene2() : Scene() {
 
             }
         }
+
+        // NUMBERS
 
 
         // FRAMES
@@ -252,14 +252,27 @@ class Scene2() : Scene() {
             position((rect.width / 7), 56.0)
         }
 
+        // TARGET NUMBER
         val targetNumber = text((0..99).random().toString()) {
             textSize = 46.0
+            color = Colors.GREEN
             pos = (IPoint.invoke((rect.width / 7) - 2, 32.0))
             alignment = TextAlignment.CENTER
             font = fontOne
-
-
         }
+
+        // CURRENT NUMBER
+        val currentNumber = text(currentNumberValue.toString()) {
+            textSize = 46.0
+            pos = (IPoint.invoke((rect.width / 15), 32.0))
+            alignment = TextAlignment.CENTER
+            font = fontOne
+        }
+
+        // Establish Music
+
+        val music = resourcesVfs["eric_track_1.wav"].readMusic()
+        music.play()
 
         // Energy ball
         val energyBall = image(resourcesVfs["electric_ball_1.png"].readBitmap()) {
@@ -287,7 +300,7 @@ class Scene2() : Scene() {
             val levelComplete = text("Level Completed") {
                 position(centerOnStage())
                 neonTarget.removeFromParent()
-                canCluster.forEach { it.removeFromParent() }
+                chipCluster.forEach { it.removeFromParent() }
             }
         }
 
@@ -296,55 +309,37 @@ class Scene2() : Scene() {
             val gameOver = text("GAME OVER") {
                 position(centerOnStage())
                 neonTarget.removeFromParent()
-                canCluster.forEach { it.removeFromParent() }
+                chipCluster.forEach { it.removeFromParent() }
             }
         }
 
         // track switch position for hit detection
 
-        fun canSwitchHit() {
-            if (canSwitch) {
-                garbagePickUps += 1
+        fun chipSwitchHit() {
+            if (chipSwitch) {
+                chipPickUps += 1
                 energyBall.scale += .05
             }
 
             // WIN Parameters
-            if (garbagePickUps >= 3) {
+            if (chipPickUps >= 3) {
                 levelComplete()
-            }
-        }
-
-        fun jellySwitchGreenHit() {
-            if (jellySwitchGreen) {
-                jellyHits += 1
-            }
-            if (jellyHits == 1) {
-                heartImgThree.visible = false
-            }
-
-            if (jellyHits == 2) {
-                heartImgTwo.visible = false
-            }
-
-            if (jellyHits >= 3) {
-                heartImgOne.visible = false
-                gameOver()
             }
         }
 
         fun jellySwitchPurpleHit() {
             if (jellySwitchPurple) {
-                jellyHits += 1
+                enemyHits += 1
             }
-            if (jellyHits == 1) {
+            if (enemyHits == 1) {
                 heartImgThree.visible = false
             }
 
-            if (jellyHits == 2) {
+            if (enemyHits == 2) {
                 heartImgTwo.visible = false
             }
 
-            if (jellyHits >= 3) {
+            if (enemyHits >= 3) {
                 heartImgOne.visible = false
                 gameOver()
             }
@@ -384,7 +379,7 @@ class Scene2() : Scene() {
                             explosion.playAnimationForDuration(2.seconds)
                             explosion.onAnimationCompleted { explosion.visible = false}
 
-                            println("Purple Jelly hits Surfer $jellyHits")
+                            println("enemy hits $enemyHits")
                         }
 
                         else if (laserOne.collidesWith(this)) {
@@ -431,7 +426,7 @@ class Scene2() : Scene() {
                             explosion.playAnimationForDuration(2.seconds)
                             explosion.onAnimationCompleted { explosion.visible = false}
 
-                            println("Purple Jelly hits Surfer $jellyHits")
+                            println("enemy hits $enemyHits")
                         }
 
                         else if (laserOne.collidesWith(this)) {
@@ -478,7 +473,7 @@ class Scene2() : Scene() {
                             explosion.playAnimationForDuration(2.seconds)
                             explosion.onAnimationCompleted { explosion.visible = false}
 
-                            println("Purple Jelly hits Surfer $jellyHits")
+                            println("enemy hits $enemyHits")
                         }
 
                         else if (laserOne.collidesWith(this)) {
@@ -525,7 +520,7 @@ class Scene2() : Scene() {
                             explosion.playAnimationForDuration(2.seconds)
                             explosion.onAnimationCompleted { explosion.visible = false}
 
-                            println("Purple Jelly hits Surfer $jellyHits")
+                            println("enemy hits $enemyHits")
                         }
 
                         else if (laserOne.collidesWith(this)) {
@@ -572,7 +567,7 @@ class Scene2() : Scene() {
                             explosion.playAnimationForDuration(2.seconds)
                             explosion.onAnimationCompleted { explosion.visible = false}
 
-                            println("Purple Jelly hits Surfer $jellyHits")
+                            println("enemy hits $enemyHits")
                         }
 
                         else if (laserOne.collidesWith(this)) {
@@ -617,7 +612,7 @@ class Scene2() : Scene() {
                             explosion.playAnimationForDuration(2.seconds)
                             explosion.onAnimationCompleted { explosion.visible = false}
 
-                            println("Purple Jelly hits Surfer $jellyHits")
+                            println("enemy hits $enemyHits")
                         }
 
                         else if (laserOne.collidesWith(this)) {
@@ -638,10 +633,10 @@ class Scene2() : Scene() {
 
                 }
             }, async {
-                canCluster.forEach {
+                chipCluster.forEach {
                     //  if (!it.visible || it.pos.y > height) {
                     delay((Random.nextInt(1, 2)).seconds)
-                    canSwitch = true
+                    chipSwitch = true
                     val canX = Random.nextInt(buffer, (width.toInt() - buffer)).toDouble()
                     it.visible = true
                     it.position(canX, -5.0)
@@ -649,11 +644,11 @@ class Scene2() : Scene() {
                     it.addUpdater {
                         if (neonTarget.collidesWith(this)) {
                             this.visible = false
-                            canSwitchHit()
-                            canSwitch = false
+                            chipSwitchHit()
+                            chipSwitch = false
 
                             // colorDefault = AnsiEscape.Color.RED
-                            println("$garbagePickUps")
+                            println("chip pick-ups: $chipPickUps")
                         }
                     }
 
