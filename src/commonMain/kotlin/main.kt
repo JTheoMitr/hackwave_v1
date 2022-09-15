@@ -2,7 +2,9 @@ import com.soywiz.klock.*
 import com.soywiz.korau.sound.readMusic
 import com.soywiz.korev.Key
 import com.soywiz.korge.*
+import com.soywiz.korge.html.Html
 import com.soywiz.korge.input.onClick
+import com.soywiz.korge.resources.resourceTtfFont
 import com.soywiz.korge.scene.Module
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.time.delay
@@ -10,15 +12,19 @@ import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tween.moveTo
 import com.soywiz.korim.atlas.readAtlas
+import com.soywiz.korim.bitmap.NativeImage
 import com.soywiz.korim.color.*
+import com.soywiz.korim.font.*
 import com.soywiz.korim.format.*
 import com.soywiz.korim.text.TextAlignment
 import com.soywiz.korinject.AsyncInjector
 import com.soywiz.korio.file.std.*
+import com.soywiz.korio.stream.openSync
 import com.soywiz.korma.geom.*
 import com.soywiz.korma.interpolation.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlin.properties.Delegates
 import kotlin.random.Random
 import kotlin.reflect.KClass
 
@@ -52,6 +58,7 @@ class Scene1() : Scene() {
 class Scene2() : Scene() {
     override suspend fun Container.sceneInit() {
 
+
         // Establish background field
         val rect = solidRect(1024.0, 768.0, Colors["#02020bdd"]).xy(0.0, 0.0)
 
@@ -66,6 +73,9 @@ class Scene2() : Scene() {
         var jellySwitchGreen = true
         var levelIsActive = false
         val surferBoundary = rect.height - 130
+
+        val fontOne = resourcesVfs["ClearSans-Bold.ttf"].readTtfFont()
+
 
         // SPRITES AND IMAGES
 
@@ -242,15 +252,17 @@ class Scene2() : Scene() {
             position((rect.width / 7), 56.0)
         }
 
-        // Energy ball
-        val energyBall = image(resourcesVfs["electric_ball_1.png"].readBitmap()) {
-            rotation = maxDegrees
-            anchor(.5, .5)
-            scale(.3)
-            position(rect.width - 80, rect.height - 60)
+        val targetNumber = text((0..99).random().toString()) {
+            textSize = 46.0
+            pos = (IPoint.invoke((rect.width / 7) - 2, 32.0))
+            alignment = TextAlignment.CENTER
+            font = fontOne
+
+
         }
 
-        val battery = image(resourcesVfs["pixel_battery_red.png"].readBitmap()) {
+        // Energy ball
+        val energyBall = image(resourcesVfs["electric_ball_1.png"].readBitmap()) {
             rotation = maxDegrees
             anchor(.5, .5)
             scale(.3)
