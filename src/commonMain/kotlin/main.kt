@@ -4,6 +4,7 @@ import com.soywiz.korau.sound.readMusic
 import com.soywiz.korev.Key
 import com.soywiz.korge.*
 import com.soywiz.korge.html.Html
+import com.soywiz.korge.input.keys
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.resources.resourceTtfFont
 import com.soywiz.korge.scene.Module
@@ -79,7 +80,7 @@ class Scene2() : Scene() {
 
         val surferBoundary = rect.height - 130
 
-        val numberSwitch = true
+        var numberSwitch = true
 
         val fontOne = resourcesVfs["ClearSans-Bold.ttf"].readTtfFont()
 
@@ -249,14 +250,20 @@ class Scene2() : Scene() {
         val targetFrame = image(resourcesVfs["monitor_cyberpunk_number_display.png"].readBitmap()) {
             anchor(.5, .5)
             scale(.69)
-            position((rect.width / 7), 56.0)
+            position((rect.width / 6), 56.0)
+        }
+
+        val currentFrame = image(resourcesVfs["monitor_cyberpunk_number_display.png"].readBitmap()) {
+            anchor(.5, .5)
+            scale(.69)
+            position((rect.width / 16), 56.0)
         }
 
         // TARGET NUMBER
         val targetNumber = text((0..99).random().toString()) {
             textSize = 46.0
             color = Colors.GREEN
-            pos = (IPoint.invoke((rect.width / 7) - 2, 32.0))
+            pos = (IPoint.invoke((rect.width / 6), 28.0))
             alignment = TextAlignment.CENTER
             font = fontOne
         }
@@ -264,7 +271,7 @@ class Scene2() : Scene() {
         // CURRENT NUMBER
         val currentNumber = text(currentNumberValue.toString()) {
             textSize = 46.0
-            pos = (IPoint.invoke((rect.width / 15), 32.0))
+            pos = (IPoint.invoke((rect.width / 16), 28.0))
             alignment = TextAlignment.CENTER
             font = fontOne
         }
@@ -349,6 +356,11 @@ class Scene2() : Scene() {
             laserOne.position(neonTarget.x, neonTarget.y)
             laserOne.visible = true
             laserOne.moveTo(laserOne.x, -25.0, 0.5.seconds, Easing.EASE)
+        }
+
+        fun switchOperator() {
+            numberSwitch = !numberSwitch
+            println("number switch is set to $numberSwitch")
         }
 
         suspend fun runJelly() {
@@ -674,6 +686,10 @@ class Scene2() : Scene() {
             }
         }
 
+
+
+        // INPUTS
+
         rect.onClick {
 
             println("clicked!")
@@ -693,6 +709,13 @@ class Scene2() : Scene() {
             }
 
         }
+
+        this.keys {
+            down(Key.O) { switchOperator() }
+            // up(Key.LEFT) { e -> /*...*/ }
+        }
+
+
 
         energyBall.onClick {
             levelIsActive = true
