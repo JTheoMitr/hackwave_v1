@@ -367,6 +367,7 @@ class Scene2() : Scene() {
 
             println("JELLYS RUNNING")
             awaitAll(async {
+                // Red Triangle Group 1
                 redTriangleGroupOne.forEach {
                     // if (!it.visible || it.pos.y > height) {
                     delay((Random.nextInt(1, 3)).seconds)
@@ -408,12 +409,15 @@ class Scene2() : Scene() {
 
                     it.moveTo(jellyX + 75, 700.0, 2.seconds, Easing.EASE_IN)
                     it.tween(it::rotation[maxDegrees], time = 500.milliseconds, easing = Easing.EASE_IN_OUT)
-                    it.moveTo(jellyX + 3, height - 25, 2.seconds, Easing.EASE_IN)
+                    it.moveTo(jellyX + 3, height - 25, 3.seconds, Easing.EASE_IN)
                     it.tween(it::rotation[minDegrees], time = 500.milliseconds, easing = Easing.EASE_IN_OUT)
                     it.moveTo(jellyX + 30, height + buffer, 1.seconds, Easing.EASE_IN)
 
+                    // 7 Seconds
+
                 }
             }, async {
+                // Red Triangle Group 2
                 redTriangleGroupTwo.forEach {
                     // if (!it.visible || it.pos.y > height) {
                     delay((Random.nextInt(1, 3)).seconds)
@@ -459,8 +463,11 @@ class Scene2() : Scene() {
                     it.tween(it::rotation[minDegrees], time = 500.milliseconds, easing = Easing.EASE_IN_OUT)
                     it.moveTo(jellyX + 30, height + buffer, 1.seconds, Easing.EASE_IN)
 
+                    // 7 Seconds
+
                 }
             }, async {
+                // Red Triangle Group 3
                 redTriangleGroupThree.forEach {
                     // if (!it.visible || it.pos.y > height) {
                     delay((Random.nextInt(1, 3)).seconds)
@@ -502,12 +509,15 @@ class Scene2() : Scene() {
 
                     it.moveTo(jellyX + 75, 300.0, 3.seconds, Easing.EASE_IN)
                     it.tween(it::rotation[maxDegrees], time = 500.milliseconds, easing = Easing.EASE_IN_OUT)
-                    it.moveTo(jellyX + 3, height - buffer, 3.seconds, Easing.EASE_IN)
+                    it.moveTo(jellyX + 3, height - buffer, 2.seconds, Easing.EASE_IN)
                     it.tween(it::rotation[minDegrees], time = 500.milliseconds, easing = Easing.EASE_IN_OUT)
                     it.moveTo(jellyX + 30, height + buffer, 1.seconds, Easing.EASE_IN)
 
+                    // 7 Seconds
+
                 }
             }, async {
+                // Red Triangle Group 4
                 redTriangleGroupFour.forEach {
                     // if (!it.visible || it.pos.y > height) {
                     delay((Random.nextInt(1, 3)).seconds)
@@ -553,8 +563,11 @@ class Scene2() : Scene() {
                     it.tween(it::rotation[minDegrees], time = 500.milliseconds, easing = Easing.EASE_IN_OUT)
                     it.moveTo(jellyX + 30, height + buffer, 2.seconds, Easing.EASE_IN)
 
+                    // 7 Seconds
+
                 }
             }, async {
+                // Red Skull Group 1
                 redSkullGroupOne.forEach {
                     // if (!it.visible || it.pos.y > height) {
                     delay((Random.nextInt(1, 3)).seconds)
@@ -594,12 +607,15 @@ class Scene2() : Scene() {
 
                     }
 
-                    it.moveTo(jellyX + 75, 400.0, 2.seconds, Easing.EASE_IN)
+                    it.moveTo(jellyX + 75, 400.0, 3.seconds, Easing.EASE_IN)
                     it.moveTo(jellyX + 3, height - 73, 2.seconds, Easing.EASE_IN)
-                    it.moveTo(jellyX + 30, height + buffer, 1.seconds, Easing.EASE_IN)
+                    it.moveTo(jellyX + 30, height + buffer, 2.seconds, Easing.EASE_IN)
+
+                    // 7 Seconds
 
                 }
             }, async {
+                // Red Skull Group 2
                 redSkullGroupTwo.forEach {
                     // if (!it.visible || it.pos.y > height) {
                     delay((Random.nextInt(1, 3)).seconds)
@@ -641,10 +657,13 @@ class Scene2() : Scene() {
 
                     it.moveTo(jellyX + 75, 400.0, 3.seconds, Easing.EASE_IN)
                     it.moveTo(jellyX + 3, height - 73, 2.seconds, Easing.EASE_IN)
-                    it.moveTo(jellyX + 30, height + buffer, 1.seconds, Easing.EASE_IN)
+                    it.moveTo(jellyX + 30, height + buffer, 2.seconds, Easing.EASE_IN)
+
+                    // 7 Seconds
 
                 }
             }, async {
+                // Chip Cluster
                 chipCluster.forEach {
                     //  if (!it.visible || it.pos.y > height) {
                     delay((Random.nextInt(1, 2)).seconds)
@@ -664,9 +683,11 @@ class Scene2() : Scene() {
                         }
                     }
 
-                    awaitAll(async {it.tween(it::rotation[270.degrees], time = 5.seconds, easing = Easing.EASE_IN_OUT)},
-                           async{it.moveTo(canX, height + buffer, 4.seconds, Easing.EASE_IN)})
-                    async{it.tween(it::rotation[(-270).degrees], time = 5.seconds, easing = Easing.EASE_IN_OUT)}
+                    awaitAll(async {it.tween(it::rotation[270.degrees], time = 500.milliseconds, easing = Easing.EASE_IN_OUT)},
+                           async{it.moveTo(canX, height + buffer, 6.seconds, Easing.EASE_IN)})
+                    async{it.tween(it::rotation[(-270).degrees], time = 500.milliseconds, easing = Easing.EASE_IN_OUT)}
+
+                    // 7 Seconds
 
                 }
             })
@@ -675,12 +696,20 @@ class Scene2() : Scene() {
         suspend fun jellyTimer() {
             while (levelIsActive) {
                 awaitAll(
+                    // try to adjust this method + various timings to decrease/destroy time gap between enemy and item waves
+                    // Start by separating runJelly and energyBall / neonTarget animations (should dec time gap and may be a good way to gain control and eliminate variables)
+                    // so one method for runJelly and one for the animations, each running based off of *while levelisactive*
+                    // once these methods are established and working properly, see how time gap is affected and start adjusting movement speeds accordingly
+
+                    // Next, look at currentNumberValue and targetNumberValue and start working out gameplay mechanics with numbers / collecting
+
+
                     async { runJelly() },
                     async {
-                       energyBall.tween(energyBall::rotation[minDegrees], time = 4.seconds, easing = Easing.EASE_IN_OUT)
+                       energyBall.tween(energyBall::rotation[minDegrees], time = 5.seconds, easing = Easing.EASE_IN_OUT)
                         energyBall.tween(energyBall::rotation[maxDegrees], time = 3.seconds, easing = Easing.EASE_IN_OUT) },
                     async {
-                        neonTarget.tween(neonTarget::rotation[minDegrees], time = 3.seconds, easing = Easing.EASE_IN_OUT)
+                        neonTarget.tween(neonTarget::rotation[minDegrees], time = 4.seconds, easing = Easing.EASE_IN_OUT)
                        neonTarget.tween(neonTarget::rotation[maxDegrees], time = 4.seconds, easing = Easing.EASE_IN_OUT) }
                 )
             }
