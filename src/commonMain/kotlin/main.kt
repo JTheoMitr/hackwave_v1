@@ -232,6 +232,14 @@ class Scene2() : Scene() {
 
         // NUMBERS
 
+        // Falling NUMBER One
+        var fallingNumberOne = text((0..99).random().toString()) {
+            textSize = 38.0
+            pos = (IPoint.invoke((rect.width / 16), -28.0))
+            alignment = TextAlignment.CENTER
+            font = fontOne
+        }
+
 
         // FRAMES
 
@@ -269,7 +277,7 @@ class Scene2() : Scene() {
         }
 
         // CURRENT NUMBER
-        val currentNumber = text(currentNumberValue.toString()) {
+        var currentNumber = text(0.toString()) {
             textSize = 46.0
             pos = (IPoint.invoke((rect.width / 16), 28.0))
             alignment = TextAlignment.CENTER
@@ -326,6 +334,10 @@ class Scene2() : Scene() {
             if (chipSwitch) {
                 chipPickUps += 1
                 energyBall.scale += .05
+                currentNumberValue += 5
+                currentNumber.text = currentNumberValue.toString()
+
+                // lets practice number manipulation by adjusting currentNumber here, to start
             }
 
             // WIN Parameters
@@ -690,6 +702,23 @@ class Scene2() : Scene() {
                     // 7 Seconds
 
                 }
+            }, async {
+                // Number
+                val canX = Random.nextInt(buffer, (width.toInt() - buffer)).toDouble()
+                fallingNumberOne.addUpdater {
+                        if (neonTarget.collidesWith(this)) {
+                            this.visible = false
+                            chipSwitchHit()
+                            chipSwitch = false
+
+                            // move number manipulation into its own method and find a new use for chips / change chips to something else
+
+                        }
+                    }
+
+                    awaitAll(async{fallingNumberOne.moveTo(canX, height + buffer, 6.seconds, Easing.EASE_IN)})
+
+                    // 7 Seconds
             })
         }
 
